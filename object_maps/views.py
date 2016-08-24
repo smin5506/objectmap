@@ -11,7 +11,7 @@ def Insertobject(request, id, objectX, objectY, width, height):
 	#return render(request, 'object_maps/mypage.html',{'welcome_text': 'Insert: ' + id})
 	return HttpResponse("Success! id: %s" %id)
 	
-def viewobject():
+def viewobject(request):
 	for row in objects.objects.all():
 		id = str(row.id)
 		objectX = str(row.objectX)
