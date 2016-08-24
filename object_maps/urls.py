@@ -5,4 +5,5 @@ from . import views
 urlpatterns = [
     url(r'^$', views.hello, name='hello'),
 	url(r'^insert/(?P<id>.+);(?P<objectX>.+);(?P<objectY>.+);(?P<width>.+);(?P<height>.*)', views.Insertobject),
+	url(r'^view/', views.viewobject),
 ]
