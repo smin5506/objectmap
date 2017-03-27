@@ -1,0 +1,122 @@
+<html>    
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>simpleMap</title>
+		
+        <script src="https://apis.skplanetx.com/tmap/js?version=1&format=javascript&appKey=d9489600-94c8-3515-972b-6b8a53b3069b"></script>
+        <script type="text/javascript">
+		
+			var xhr = new XMLHttpRequest();
+			var result;
+			var route_Array = [];
+			var temp = [];
+			
+			function openRequest(path) {
+				xhr.onreadystatechange = getdata;
+				xhr.open("GET", path,false);
+				xhr.send();
+				
+			}
+			function getdata() {
+				if(xhr.readyState==4 && xhr.status==200) {
+					result = xhr.responseText;
+					set_data(result);
+				}
+			}
+			
+			var path = "http://127.0.0.1:8000/object_maps/setting_map/";
+			openRequest(path);
+
+			function set_data(result){
+				myArray = result.split('[-1, -1]');
+				route_Array = myArray[0].split(')(');
+				route_Array[0] = route_Array[0].replace('(','');
+				route_Array[route_Array.length-1] = route_Array[route_Array.length-1].replace(')','');
+				for (var i = 0; i < route_Array.length; i++){
+					temp = route_Array[i].split(',');
+					temp[0] = temp[0].replace("'",'');
+					temp[0] = temp[0].replace("'",'');
+					temp[1] = temp[1].replace("'",'');
+					temp[1] = temp[1].replace("'",'');
+					temp[0] = Number(temp[0]);
+					temp[1] = Number(temp[1]);
+					route_Array[i] = [temp[0],temp[1]];
+				}
+				
+				obstacle_Array = myArray[1].split(')(');
+				obstacle_Array[0] = obstacle_Array[0].replace('(','');
+				obstacle_Array[obstacle_Array.length-1] = obstacle_Array[obstacle_Array.length-1].replace(')','');
+				for (var i = 0; i < obstacle_Array.length; i++){
+					temp = obstacle_Array[i].split(',');
+					temp[0] = temp[0].replace("'",'');
+					temp[0] = temp[0].replace("'",'');
+					temp[1] = temp[1].replace("'",'');
+					temp[1] = temp[1].replace("'",'');
+					temp[0] = Number(temp[0]);
+					temp[1] = Number(temp[1]);
+					obstacle_Array[i] = [temp[0],temp[1]];
+				}
+			}
+			set_data(result);
+            var map;
+            var centerLL;      //중심 좌표와 지도레벨을 정의 합니다.
+			
+			//초기화 함수
+			function initTmap(){
+				centerLL = new Tmap.LonLat(route_Array[0][1], route_Array[0][0]);
+											
+				map = new Tmap.Map({div:'map_div',
+									width:'100%', 
+									height:'100%',
+									transitionEffect:"resize",
+									animation:true
+								});
+
+				
+				lineString = get_lineString();
+				var style_bold = {strokeWidth: 4};
+				var mLineFeature = new Tmap.Feature.Vector(lineString, null, style_bold);
+				
+				var vectorLayer = new Tmap.Layer.Vector("vectorLayerID");
+				map.addLayer(vectorLayer);
+				 
+				vectorLayer.addFeatures([mLineFeature]);
+				
+				zoom = 17;
+				map.setCenter(centerLL, zoom);        
+				markers = new Tmap.Layer.Markers( "MarkerLayer" );
+				map.addLayer(markers);
+				
+				for (var i = 0; i < obstacle_Array.length; i++){
+					obstacle1 = new Tmap.LonLat(obstacle_Array[i][1], obstacle_Array[i][0]);
+					get_addMarker(obstacle1);
+				}
+				
+			};
+
+			function get_addMarker(lonlat){
+				var size = new Tmap.Size(21,25);
+				var offset = new Tmap.Pixel(-(size.w/2), -size.h);
+				var icon = new Tmap.IconHtml("<img src='https://developers.skplanetx.com/upload/tmap/marker/pin_b_s_simple.png'></img>", size, offset); 
+				var marker1 = new Tmap.Marker(lonlat,icon);
+				markers.addMarker(marker1);
+			}
+			
+			function get_lineString() {
+				var pointList = [];
+				for (var i = 0; i < route_Array.length; i++){
+					pointList.push(new Tmap.Geometry.Point(route_Array[i][1], route_Array[i][0]));
+				}
+				var lineString = new Tmap.Geometry.LineString(pointList);
+				return lineString
+			}
+			
+		</script>
+		
+    </head>
+    <body onload="initTmap()">
+		<div id="map_div">
+        </div>
+    </body>
+	
+</html>

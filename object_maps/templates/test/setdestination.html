@@ -1,0 +1,41 @@
+<html>
+
+	<head>
+		<title>경로시작</title>
+	</head>
+	
+	<BODY bgcolor="#FFFFFF" text="#000000"> <br>
+		<form method="POST" action="startor/">  {% csrf_token %}
+			<table width="500" border="0" cellspacing="0">
+				<tr>
+					<td>gps X값(경도)</td>
+					<td> 
+						<input type="text" name="gpsX" size="10" value="128.602075">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>gps Y값(위도)</td>
+					<td> 
+						<input type="text" name="gpsY" size="10" value="35.863517">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>목적지 X값(경도)</td>
+					<td> 
+						<input type="text" name="destinationX" size="10" value="128.606975">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>목적지 Y값(위도)</td>
+					<td> 
+						<input type="text" name="destinationY" size="10" value="35.861615">
+					</td>
+				</tr>
+			<input type="submit" value="start_path" name="submit">
+		</form>
+	</body>
+	
+</html>

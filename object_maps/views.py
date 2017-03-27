@@ -1,24 +1,40 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-from object_maps.models import objects
-
+from django.http import JsonResponse
+from django.core import serializers
+from .models import HBT
+import urllib.request
+import pandas
 # Create your views here.
+
 def hello(request):
-	return HttpResponse("hello, world!")
-	
-def Insertobject(request, id, objectX, objectY, width, height):
-	objects(id=id, objectX=objectX, objectY=objectY, width=width, height=height).save()
-	#return render(request, 'object_maps/mypage.html',{'welcome_text': 'Insert: ' + id})
-	return HttpResponse("Success! id: %s" %id)
-	
-def viewobject(request):
-	for row in objects.objects.all():
-		id = str(row.id)
-		objectX = str(row.objectX)
-		objectY = str(row.objectY)
-		width = str(row.width)
-		height = str(row.height)
+	return render(request, 'test/setobstacle.html', {})
+
+def setobstacle(request):
+	if request.method == 'POST':		
+		myID = request.POST['ID']
+		myLocation = request.POST['Location']
+		HBT.Head(ID=myID, Location = myLocation).save()
 		
-		data = "id: " + id + ", objectX: " + objectX + ", objectY: " + objectY + ", width: " + width + ", height: " + height
-		return HttpResponse(data)
-	return HttpResponse("end")
+		myType = request.POST['Type']
+		myDataSequence = request.POST['DataSequence']
+		HBT.Body(Type=myType, DataSequence=myDataSequence).save()
+		
+		myResult = request.POST['Result']
+		myAccuracy = request.POST['Accuracy']
+		HBT.Tail(Result=myResult, Accuracy=myAccuracy).save()
+	return HttpResponse("good")
+			
+def viewobstacle(request):
+	Head_data = serializers.serialize('json', HBT.Head.objects.all())
+	Body_data = serializers.serialize('json', HBT.Body.objects.all())
+	Tail_data = serializers.serialize('json', HBT.Tail.objects.all())
+	data = Head_data + Body_data + Tail_data
+	return HttpResponse(data, content_type='json')
+	
+
+	
+	
+	
+	

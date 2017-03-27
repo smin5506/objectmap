@@ -1,0 +1,118 @@
+<html>
+
+	<head>
+		<title>HBT정보저장</title>
+		<script language="javascript">
+			function head_check_disable(frm1) {
+				if( frm.head_check.checked == true ) {
+					frm.ID.disabled = false;
+					frm.Time.disabled = false;
+					frm.Location.disabled = false;
+				}
+				else {
+					frm.ID.disabled = true;
+					frm.Time.disabled = true;
+					frm.Location.disabled = true;
+				}
+			}
+			
+			function body_check_disable(frm1) {
+				if( frm.body_check.checked == true ) {
+					frm.Type.disabled = false;
+					frm.DataSequence.disabled = false;
+				}
+				else {
+					frm.Type.disabled = true;
+					frm.DataSequence.disabled = true;
+				}
+			}
+			function tail_check_disable(frm1) {	
+				if( frm.tail_check.checked == true ) {
+					frm.Result.disabled = false;
+					frm.Accuracy.disabled = false;
+				}	
+				else {	
+					frm.Result.disabled = true;
+					frm.Accuracy.disabled = true;
+				}
+			}
+			
+		</script>
+	</head>
+	
+	<BODY bgcolor="#FFFFFF" text="#000000"> <br>
+		<form name="frm" method="POST" action="setobstacle/">  {% csrf_token %}
+			<table width="500" border="0" cellspacing="0">
+				<tr>
+					<td>Head</td>
+					<td> 
+						<input type="checkbox" name="head_check" onClick="head_check_disable(this.form)">					</td>
+				</tr>
+				
+				<tr>
+					<td>ID</td>
+					<td> 
+						<input type="text" name="ID" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Time</td>
+					<td> 
+						<input type="text" name="Time" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Location</td>
+					<td> 
+						<input type="text" name="Location" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Body</td>
+					<td> 
+						<input type="checkbox" name="body_check" onClick="body_check_disable(this.form)">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Type</td>
+					<td> 
+						<input type="text" name="Type" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>DataSequence</td>
+					<td> 
+						<input type="text" name="DataSequence" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Tail</td>
+					<td> 
+						<input type="checkbox" name="tail_check" onClick="tail_check_disable(this.form)">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Result</td>
+					<td> 
+						<input type="text" name="Result" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>Accuracy</td>
+					<td> 
+						<input type="text" name="Accuracy" size="10" disabled="disabled">
+					</td>
+				</tr>
+			<input type="submit" value="보내기" name="submit">
+		</form>
+	</body>
+	
+</html>

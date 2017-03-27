@@ -1,0 +1,96 @@
+<html>
+
+	<head>
+		<title>simulator</title>
+		<script language="javascript">
+			function checkDisable(frm1)
+			{
+				if( frm.check_object.checked == true ){
+				   frm.dis.disabled = false;
+				   frm.deg.disabled = false;
+				} 
+				else 
+				{
+				   frm.dis.disabled = true;
+				   frm.deg.disabled = true;
+				}
+			}
+			
+		</script>
+	</head>
+
+	<BODY bgcolor="#FFFFFF" text="#000000"> <br>
+		<form method="POST" action="startor/">  {% csrf_token %}
+			<table width="500" border="0" cellspacing="0">
+				<tr>
+					<td>gps X값(경도)</td>
+					<td> 
+						<input type="text" name="gpsX" size="10">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>gps Y값(위도)</td>
+					<td> 
+						<input type="text" name="gpsY" size="10">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>목적지 X값(경도)</td>
+					<td> 
+						<input type="text" name="destinationX" size="10">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>목적지 Y값(위도)</td>
+					<td> 
+						<input type="text" name="destinationY" size="10">
+					</td>
+				</tr>
+			<input type="submit" value="start_path" name="start_path">
+		</form>
+
+		<form name="frm" method="POST" action="simulator/">  {% csrf_token %}
+			<table width="500" border="0" cellspacing="0">
+				<tr>
+					<td>gps X값(경도)</td>
+					<td> 
+						<input type="text" name="gpsX" size="10">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>gps Y값(위도)</td>
+					<td> 
+						<input type="text" name="gpsY" size="10">
+					</td>
+				</tr>
+			
+				<tr>
+					<td>장애물 발견</td>
+					<td> 
+						<input type="checkbox" name="check_object" onClick="checkDisable(this.form)">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>거리</td>
+					<td> 
+						<input type="text" name="dis" size="10" disabled="disabled">
+					</td>
+				</tr>
+				
+				<tr>
+					<td>각도</td>
+					<td> 
+						<input type="text" name="deg" size="10" disabled="disabled">
+					</td>
+				</tr>
+			<input type="submit" value="send" name="send">
+		</form>
+		
+	</body>
+	
+</html>

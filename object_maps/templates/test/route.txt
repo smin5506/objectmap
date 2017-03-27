@@ -1,0 +1,121 @@
+<html>    
+	<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>simpleMap</title>
+		
+        <script src="https://apis.skplanetx.com/tmap/js?version=1&format=javascript&appKey=d9489600-94c8-3515-972b-6b8a53b3069b"></script>
+        <script type="text/javascript">
+            var map;
+            var centerLL;      //중심 좌표와 지도레벨을 정의 합니다.
+			var xhr;
+			var result;
+			
+			function get_data_from_path(path) {
+				xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+				  if(xhr.readyState==4 && xhr.status==200) {
+					document.write( '<pre>' + xhr.responseText + '</pre>' );
+				  }
+				}
+				xhr.onreadystatechange = alertContents;
+				xhr.open("GET",path);
+				xhr.send();
+			}
+			
+			function alertContents() {
+				if (xhr.readyState == 4) {
+					if (xhr.status == 200) {
+						result = xhr.responseText;
+					} 
+					else {
+						alert('There was a problem with the request.');
+					}
+				}
+			}
+			
+			//초기화 함수
+			function initTmap(){
+				centerLL = new Tmap.LonLat(14316073.460572166, 4281761.583282635);
+				map = new Tmap.Map({div:'map_div',
+									width:'100%', 
+									height:'100%',
+									transitionEffect:"resize",
+									animation:true
+								});
+
+				obstacle1 = new Tmap.LonLat(14316073.460572166, 4281761.583282635);
+				obstacle2 = new Tmap.LonLat(14316270.607390333, 4281716.529326573);
+				lineString = get_lineString();
+				var style_bold = {strokeWidth: 4};
+				var mLineFeature = new Tmap.Feature.Vector(lineString, null, style_bold);
+				
+				var vectorLayer = new Tmap.Layer.Vector("vectorLayerID");
+				map.addLayer(vectorLayer);
+				 
+				vectorLayer.addFeatures([mLineFeature]);
+				
+				zoom = 17;
+				map.setCenter(centerLL, zoom);        
+				markers = new Tmap.Layer.Markers( "MarkerLayer" );
+				map.addLayer(markers);
+				
+				//get_addMarker(obstacle1);
+				//get_addMarker(obstacle2);
+				
+			};
+
+			function get_addMarker(lonlat){
+				var size = new Tmap.Size(21,25);
+				var offset = new Tmap.Pixel(-(size.w/2), -size.h);
+				var icon = new Tmap.IconHtml("<img src='https://developers.skplanetx.com/upload/tmap/marker/pin_b_s_simple.png'></img>", size, offset); 
+				var marker1 = new Tmap.Marker(lonlat,icon);
+				markers.addMarker(marker1);
+			}
+			
+			function get_lineString() {
+				var pointList = [];
+
+				pointList.push(new Tmap.Geometry.Point(14315916, 4281862));
+				pointList.push(new Tmap.Geometry.Point(14315930, 4281858));
+				pointList.push(new Tmap.Geometry.Point(14315956, 4281852));
+				pointList.push(new Tmap.Geometry.Point(14315961, 4281854));
+				pointList.push(new Tmap.Geometry.Point(14315966, 4281848));
+				pointList.push(new Tmap.Geometry.Point(14315968, 4281843));
+				pointList.push(new Tmap.Geometry.Point(14315976, 4281841));
+				pointList.push(new Tmap.Geometry.Point(14316025, 4281833));
+				pointList.push(new Tmap.Geometry.Point(14316012, 4281790));
+				pointList.push(new Tmap.Geometry.Point(14316010, 4281783));
+				pointList.push(new Tmap.Geometry.Point(14316013, 4281778));
+				pointList.push(new Tmap.Geometry.Point(14316019, 4281770));
+				pointList.push(new Tmap.Geometry.Point(14316034, 4281767));
+				pointList.push(new Tmap.Geometry.Point(14316081, 4281758));
+				pointList.push(new Tmap.Geometry.Point(14316090, 4281755));
+				pointList.push(new Tmap.Geometry.Point(14316095, 4281753));
+				pointList.push(new Tmap.Geometry.Point(14316224, 4281719));
+				pointList.push(new Tmap.Geometry.Point(14316230, 4281719));
+				pointList.push(new Tmap.Geometry.Point(14316233, 4281718));
+				pointList.push(new Tmap.Geometry.Point(14316257, 4281712));
+				pointList.push(new Tmap.Geometry.Point(14316355, 4281687));
+				pointList.push(new Tmap.Geometry.Point(14316382, 4281680));
+				pointList.push(new Tmap.Geometry.Point(14316416, 4281672));
+				pointList.push(new Tmap.Geometry.Point(14316454, 4281661));
+				pointList.push(new Tmap.Geometry.Point(14316484, 4281653));
+				pointList.push(new Tmap.Geometry.Point(14316471, 4281606));
+				pointList.push(new Tmap.Geometry.Point(14316468, 4281595));
+				var lineString = new Tmap.Geometry.LineString(pointList);
+				return lineString
+			}
+		</script>
+    </head>
+    <body onload="initTmap()">
+		<script>
+			var request_path = "http://127.0.0.1:8000/object_maps/view_request/";
+			get_data_from_path(request_path);
+			var myArray = result.split(',');
+			var route_path = "https://apis.skplanetx.com/tmap/routes/pedestrian?version=1&startX=" + myArray[0] + "&startY=" + myArray[1] + "&endX=" + myArray[2] + "&endY=" + myArray[3] + "&startName=a&endName=b&reqCoordType=WGS84GEO&appKey=d9489600-94c8-3515-972b-6b8a53b3069b"
+			alert(route_path);
+		</script>
+        <div id="map_div">
+        </div>        
+    </body>
+</html>
